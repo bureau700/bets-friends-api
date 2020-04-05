@@ -6,16 +6,23 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc src/index.ts"
+    "build": "rollup -c rollup.config.js"
   },
   "devDependencies": {
-    "@types/express": "^4.17.4",
     "env-cmd": "^10.1.0",
+    "husky": "^4.2.3",
+    "rollup-plugin-typescript": "^1.0.1",
     "ts-node": "^8.8.1",
+    "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "apollo-server-express": "^2.11.0",
     "express": "^4.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
   }
 }
