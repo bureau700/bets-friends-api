@@ -25,7 +25,7 @@ blocks:
     task:
       prologue:
         commands:
-          - checkout
+          - checkout --use-cache
           - sem-version node 12
           - node --version
           - npm --version
@@ -37,3 +37,49 @@ blocks:
         - name: Unit Tests
           commands:
             - npm run test
+
+  # - name: Build
+  #   run:
+  #     when: "branch = 'master'"
+  #   task:
+  #     prologue:
+  #       commands:
+  #         - checkout
+  #         - sem-version node 12
+  #         - node --version
+  #         - npm --version
+  #         - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
+  #     jobs:
+  #       - name: Typecheck
+  #         commands:
+  #           - ./node_modules/.bin/tsc --skipLibCheck
+  #       - name: Unit Tests
+  #         commands:
+  #           - npm run test
+  
+  - name: Deploy
+    run:
+      when: "branch = 'master'"
+    task:
+      secrets:
+        - name: heroku-secret
+      env_vars:
+        - name: HEROKU_REMOTE
+          value: https://git.heroku.com/bets-friends.git
+      prologue:
+        commands:
+          - checkout --use-cache
+          - sem-version node 12
+          - node --version
+          - npm --version
+          - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
+          - npm run build
+      jobs:
+      - name: Push code
+        commands:
+          - ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+          - chmod 600 ~/.ssh/id_rsa_semaphore_heroku
+          - ssh-add ~/.ssh/id_rsa_semaphore_heroku
+          - git config --global url.ssh://git@heroku.com/.insteadOf https://git.heroku.com/
+          - git remote add heroku $HEROKU_REMOTE
+          - git push heroku -f $SEMAPHORE_GIT_BRANCH:master
