@@ -1,0 +1,22 @@
+{
+    "editor.formatOnSave": false,
+    "[javascript]": {
+      "editor.formatOnSave": true
+    },
+    "[json]": {
+      "editor.formatOnSave": true
+    },
+    "[typescript]": {
+      "editor.formatOnSave": true
+    },
+    "eslint.packageManager": "npm",
+    "eslint.workingDirectories": [
+      "./*",
+      "./src/**/**",
+      "./tests/**/**"
+    ],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "typescript.preferences.importModuleSpecifier": "relative"
+  }
