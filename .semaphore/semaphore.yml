@@ -65,7 +65,7 @@ blocks:
         - name: heroku-secret
       env_vars:
         - name: HEROKU_REMOTE
-          value: https://git.heroku.com/bets-friends.git
+          value: https://git.heroku.com/bets-friends-staging.git
       prologue:
         commands:
           - checkout
