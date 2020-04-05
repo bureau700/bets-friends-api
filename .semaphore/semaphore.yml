@@ -15,7 +15,7 @@ blocks:
           - node --version
           - npm --version
       jobs:
-        - name: Test
+        - name: npm install
           commands:
             - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
             - npm install
