@@ -1,19 +1,39 @@
 version: v1.0
-name: Test MyApp
+name: Bets Friends API
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+    
 blocks:
-  - name: Test
+  - name: Install dependencies
     task:
+      prologue:
+        commands:
+          - checkout
+          - sem-version node 12
+          - node --version
+          - npm --version
       jobs:
         - name: Test
           commands:
-            - checkout
-            - sem-version node 12
-            - cache restore
+            - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
             - npm install
-            - cache store
-            - npm run build --if-present
-            - npm test
+            - cache store node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json) node_modules
+
+  - name: Test
+    task:
+      prologue:
+        commands:
+          - checkout
+          - sem-version node 12
+          - node --version
+          - npm --version
+          - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
+      jobs:
+        - name: Typecheck
+          commands:
+            - ./node_modules/.bin/tsc --skipLibCheck
+        - name: Unit Tests
+          commands:
+            - npm run test
