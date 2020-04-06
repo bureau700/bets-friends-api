@@ -1,9 +1,13 @@
 import express from 'express';
+import router from './routes';
+import { initDatabase } from './database';
 
-const app = express();
+export async function initApp() {
+  const connection = await initDatabase();
 
-app.get('/ping', (_req, res) => {
-  res.send('pong');
-});
+  const app = express();
+  app.use('/', router);
+  app.set('db', connection);
 
-export default app;
+  return app;
+}
