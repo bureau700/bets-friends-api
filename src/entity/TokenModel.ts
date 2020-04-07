@@ -7,9 +7,9 @@ import {
   Index,
   BaseEntity,
 } from 'typeorm';
-import User from './UserModel';
+import UserModel from './UserModel';
 
-@Entity()
+@Entity('Token')
 export default class TokenModel extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
@@ -18,7 +18,7 @@ export default class TokenModel extends BaseEntity {
   @Index()
   token?: string;
 
-  @OneToOne(type => User)
+  @OneToOne(type => UserModel)
   @JoinColumn()
-  user?: User;
+  user?: UserModel;
 }

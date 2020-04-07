@@ -1,12 +1,16 @@
 import * as core from 'express-serve-static-core';
 import request from 'supertest';
-import { initApp } from '../src/app';
+import { initApp, Application } from '../../src/app';
 
 describe('app', () => {
-  let app: core.Express;
+  let app: Application;
 
   beforeEach(async () => {
     app = await initApp();
+  });
+
+  afterEach(async () => {
+    await app.connection.close();
   });
 
   describe('/ping', () => {

@@ -1,13 +1,9 @@
-import crypto from 'crypto';
 import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken } from './jwt';
 import { encodePassword } from './password';
 
-const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
-const SECURITY_SALT: string | undefined = process.env.SECURITY_SALT;
-
-class UserService {
+export class UserService {
   /**
    * Authenticate user.
    * @param username username
@@ -41,3 +37,5 @@ class UserService {
     throw new Error('Authentication error.');
   }
 }
+
+export const userService = new UserService();
