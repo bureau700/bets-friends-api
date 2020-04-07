@@ -21,16 +21,31 @@ blocks:
             - npm install
             - cache store node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json) node_modules
 
+  # - name: Test with Docker
+  #   task:
+  #     prologue:
+  #       commands:
+  #         - checkout
+  #         - docker build -t bets-friends-e2e .
+  #     jobs:
+  #       - name: E2E Test
+  #         commands:
+  #           - docker run bets-friends-e2e
+
   - name: Test with Docker
     task:
       prologue:
         commands:
           - checkout
-          - docker build -t bets-friends-e2e .
+          # Run database docker container (daemon mode)
+          - docker-compose up -d db
+          # Build test docker
+          - docker-compose build test
       jobs:
         - name: E2E Test
           commands:
-            - docker run bets-friends-e2e
+            # Run test docker container
+            - docker-compose up test
 
   # - name: Test
   #   task:
