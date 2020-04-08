@@ -8,5 +8,5 @@ export default async function() {
   });
   process.env.NODE_ENV = 'test';
 
-  // await loadFixtures();
+  await loadFixtures();
 }
