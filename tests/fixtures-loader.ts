@@ -37,22 +37,11 @@ export async function loadFixtures() {
       const entity = await builder.build(fixture);
       await (entity as BaseEntity).save();
     }
-
-    if (connection) {
-      await connection.close();
-    }
   } catch (err) {
-    if (connection) {
-      await connection.close();
-    }
-
     throw err;
   } finally {
+    if (connection) {
+      await connection.close();
+    }
   }
 }
-
-// loadFixtures('./fixtures')
-//   .then(() => {
-//     console.log('Fixtures are successfully loaded.');
-//   })
-//   .catch(err => console.log(err));

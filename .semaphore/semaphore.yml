@@ -37,6 +37,12 @@ blocks:
       prologue:
         commands:
           - checkout
+          - sem-version node 12
+          - node --version
+          - npm --version
+          - docker -v
+          - docker-compose -v
+          - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
           # Run database docker container (daemon mode)
           - docker-compose up -d db
           # Build test docker
