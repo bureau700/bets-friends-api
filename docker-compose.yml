@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: betsfriends-test
+      POSTGRES_USER: betsfriends
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+  test:
+    container_name: betsfriends-container-test
+    build: .
+    environment:
+      DATABASE_URL: postgres://betsfriends:secret@postgres/betsfriends
+      JWT_SECRET: jwtsecret
+      SECURITY_SALT: securitysalt
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
