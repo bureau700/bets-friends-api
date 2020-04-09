@@ -1,6 +1,6 @@
 import path from 'path';
 import { loadFixtures } from './fixtures-loader';
-import fs from 'fs';
+import { cleanDatabase } from './db-cleaner';
 
 export default async function() {
   require('dotenv').config({
@@ -8,5 +8,6 @@ export default async function() {
   });
   process.env.NODE_ENV = 'test';
 
+  await cleanDatabase();
   await loadFixtures();
 }
