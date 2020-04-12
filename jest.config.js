@@ -5,9 +5,4 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/tests/**/?(*.)+(spec|test).[jt]s?(x)'],
   clearMocks: true,
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.test.json',
-    },
-  },
 };
