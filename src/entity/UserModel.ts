@@ -14,8 +14,8 @@ export default class UserModel extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  @Column()
-  @Index()
+  @Column({ nullable: false })
+  @Index({ unique: true })
   username?: string;
 
   @Column()

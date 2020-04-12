@@ -4,4 +4,4 @@ items:
     username: bob
     __call:
       setPassword:
-        - foo
+        - password

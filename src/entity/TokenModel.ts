@@ -14,11 +14,16 @@ export default class TokenModel extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  @Column()
+  @Column({ nullable: false })
   @Index()
   token?: string;
 
-  @OneToOne(type => UserModel)
+  @OneToOne(type => UserModel, { nullable: false })
   @JoinColumn()
   user?: UserModel;
+
+  static async findByUserId(user: UserModel) {
+    const results = await this.find({ where: { user } });
+    if (results.length) return results[0];
+  }
 }

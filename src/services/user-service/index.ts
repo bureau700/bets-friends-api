@@ -2,6 +2,7 @@ import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken } from './jwt';
 import { encodePassword } from './password';
+import { Unauthorized } from 'http-errors';
 
 export class UserService {
   /**
@@ -13,28 +14,22 @@ export class UserService {
     const user = await UserModel.findByUsername(username);
     if (!user) throw new Error('Not found');
     if (user.password === encodePassword(password)) {
-      // Create token
-      const token = new TokenModel();
+      // Create token or reuse an existant one.
+      let token = (await TokenModel.findByUserId(user)) || new TokenModel();
       token.token = createToken(username);
       token.user = user;
-      await token.save();
-      return token;
+      token = await token.save();
+      return {
+        token: token.token,
+      };
     } else {
-      return this._handlePublicError(
-        `Authentication error (bad password): ${username}`,
-      );
+      throw new Unauthorized();
     }
   }
 
   public async createUser(user: UserModel) {
     if (user.password) user.password = encodePassword(user.password);
     return UserModel.save(user);
-  }
-
-  // FIXME: manage this.
-  private _handlePublicError(logMessage: string) {
-    console.error(logMessage);
-    throw new Error('Authentication error.');
   }
 }
 

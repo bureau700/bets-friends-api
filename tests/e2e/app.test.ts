@@ -5,11 +5,11 @@ import { initApp, Application } from '../../src/app';
 describe('app', () => {
   let app: Application;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     app = await initApp();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.connection.close();
   });
 
