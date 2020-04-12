@@ -1,0 +1,7 @@
+entity: UserModel
+items:
+  first:
+    username: bob
+    __call:
+      setPassword:
+        - password

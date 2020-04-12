@@ -1,7 +1,18 @@
+import * as core from 'express-serve-static-core';
 import request from 'supertest';
-import app from '../src/app';
+import { initApp, Application } from '../../src/app';
 
 describe('app', () => {
+  let app: Application;
+
+  beforeAll(async () => {
+    app = await initApp();
+  });
+
+  afterAll(async () => {
+    await app.connection.close();
+  });
+
   describe('/ping', () => {
     it('should return pong', async () => {
       const response = await request(app)

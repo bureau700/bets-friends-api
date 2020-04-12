@@ -1,9 +1,23 @@
 import express from 'express';
+import publicRouter from './public-routes';
+import privateRouter from './private-routes';
+import { initDatabase } from './database';
+import errorhandler from 'errorhandler';
+import * as core from 'express-serve-static-core';
+import { Connection } from 'typeorm';
 
-const app = express();
+export type Application = core.Express & { connection: Connection };
 
-app.get('/ping', (_req, res) => {
-  res.send('pong');
-});
+export async function initApp(): Promise<Application> {
+  const connection = await initDatabase();
 
-export default app;
+  const app = express();
+  app.set('db', connection);
+  app.use('/', publicRouter);
+  app.use('/', privateRouter);
+  app.use(errorhandler());
+
+  (app as Application).connection = connection;
+
+  return app as Application;
+}
