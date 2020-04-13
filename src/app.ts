@@ -2,6 +2,7 @@ import express from 'express';
 import errorhandler from 'errorhandler';
 import * as core from 'express-serve-static-core';
 import { Connection } from 'typeorm';
+// import passport from 'passport';
 import publicRouter from './public-routes';
 import privateRouter from './private-routes';
 import { initDatabase } from './database';

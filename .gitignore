@@ -1,4 +1,7 @@
 ### Node ###
+# Yarn lock (this project uses npm)
+yarn.lock
+
 # Logs
 logs
 *.log

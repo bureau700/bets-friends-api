@@ -40,7 +40,7 @@ router.get('/login', async (req, res) => {
   }
 });
 
-router.post('/signup', req => {
+router.post('/signup', (req) => {
   console.log(req.body);
 });
 
