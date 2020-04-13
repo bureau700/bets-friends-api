@@ -14,6 +14,7 @@ export async function initDatabase() {
           type: 'postgres',
           url: process.env.DATABASE_URL,
           logging: ['query', 'error'],
+          synchronize: true,
         };
 
   const connection = await createConnection({

@@ -75,17 +75,4 @@ describe('app > security > authentication', () => {
       });
     });
   });
-
-  // describe('/signup', () => {
-  //   const username = 'new-user';
-  //   const password = 'new-user-password';
-
-  //   it('should create a new user', async () => {
-  //     await request(app)
-  //       .post('/signup')
-  //       .set('Accept', 'application/json')
-  //       .send({ username, password })
-  //       .expect(201); // Created.
-  //   });
-  // });
 });

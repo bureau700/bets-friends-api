@@ -3,6 +3,12 @@ import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken } from './jwt';
 import { encodePassword } from './password';
+import { userAlreadyExistsError } from './errors';
+
+export interface UserCreationRequest {
+  username: string;
+  password: string;
+}
 
 export class UserService {
   /**
@@ -26,10 +32,20 @@ export class UserService {
     throw new Unauthorized();
   }
 
-  // public async createUser(user: UserModel) {
-  //   if (user.password) user.password = encodePassword(user.password);
-  //   return UserModel.save(user);
-  // }
+  public async createUser({
+    username,
+    password,
+  }: UserCreationRequest): Promise<UserModel> {
+    const existingUser = await UserModel.findByUsername(username);
+    if (existingUser) {
+      throw userAlreadyExistsError;
+    }
+
+    const user = new UserModel();
+    user.username = username;
+    user.setPassword(password);
+    return user.save();
+  }
 }
 
 export const userService = new UserService();
