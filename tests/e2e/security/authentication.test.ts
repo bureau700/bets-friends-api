@@ -1,12 +1,10 @@
 import request from 'supertest';
-import { initApp, Application } from '../../../src/app';
-import { UserService } from '../../../src/services/user-service';
 import { fail } from 'assert';
+import { initApp, Application } from '../../../src/app';
 import { USERNAME, PASSWORD } from './constants';
 
 describe('app > security > authentication', () => {
   let app: Application;
-  let userService: UserService;
 
   beforeAll(async () => {
     app = await initApp();
@@ -18,7 +16,7 @@ describe('app > security > authentication', () => {
 
   describe('/login', () => {
     const basicAuth = (username: string, password: string) =>
-      `Basic: ${Buffer.from(username + ':' + password).toString('base64')}`;
+      `Basic: ${Buffer.from(`${username}:${password}`).toString('base64')}`;
 
     describe('when auth granted', () => {
       it('should authenticate user', async () => {
@@ -69,7 +67,7 @@ describe('app > security > authentication', () => {
         const username = 'bob';
         const password = 'prout';
 
-        const response = await request(app)
+        await request(app)
           .get('/login')
           .set('Authorization', basicAuth(username, password))
           .set('Accept', 'application/json')
@@ -78,7 +76,16 @@ describe('app > security > authentication', () => {
     });
   });
 
-  describe('/signup', () => {
-    it.todo('should create a new user');
-  });
+  // describe('/signup', () => {
+  //   const username = 'new-user';
+  //   const password = 'new-user-password';
+
+  //   it('should create a new user', async () => {
+  //     await request(app)
+  //       .post('/signup')
+  //       .set('Accept', 'application/json')
+  //       .send({ username, password })
+  //       .expect(201); // Created.
+  //   });
+  // });
 });

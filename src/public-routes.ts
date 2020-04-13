@@ -1,15 +1,18 @@
 import { Router } from 'express';
-import { userService } from './services/user-service';
 import { BadRequest, Unauthorized } from 'http-errors';
+import bodyParser from 'body-parser';
+import { userService } from './services/user-service';
 
 const router = Router();
+
+router.use(bodyParser.json());
 
 router.get('/login', async (req, res) => {
   const getUsernameAndPassword = (authorizationHeader: string): string[] => {
     const [type, value] = authorizationHeader.split(':');
     if (type.toLowerCase() !== 'basic') throw new BadRequest();
 
-    let decodedValue = Buffer.from(value.trim(), 'base64').toString('ascii');
+    const decodedValue = Buffer.from(value.trim(), 'base64').toString('ascii');
 
     try {
       const valueArray = decodedValue.split(':');
@@ -35,6 +38,10 @@ router.get('/login', async (req, res) => {
       res.status(500).send(err);
     }
   }
+});
+
+router.post('/signup', req => {
+  console.log(req.body);
 });
 
 router.get('/ping', (_req, res) => {

@@ -2,7 +2,7 @@ import { Client } from 'pg';
 
 export async function cleanDatabase() {
   const client = new Client({
-    connectionString: process.env.DATABASE_URL + '-test',
+    connectionString: `${process.env.DATABASE_URL}-test`,
   });
   await client.connect();
 

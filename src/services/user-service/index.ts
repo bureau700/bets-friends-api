@@ -1,8 +1,8 @@
+import { Unauthorized } from 'http-errors';
 import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken } from './jwt';
 import { encodePassword } from './password';
-import { Unauthorized } from 'http-errors';
 
 export class UserService {
   /**
@@ -22,15 +22,14 @@ export class UserService {
       return {
         token: token.token,
       };
-    } else {
-      throw new Unauthorized();
     }
+    throw new Unauthorized();
   }
 
-  public async createUser(user: UserModel) {
-    if (user.password) user.password = encodePassword(user.password);
-    return UserModel.save(user);
-  }
+  // public async createUser(user: UserModel) {
+  //   if (user.password) user.password = encodePassword(user.password);
+  //   return UserModel.save(user);
+  // }
 }
 
 export const userService = new UserService();

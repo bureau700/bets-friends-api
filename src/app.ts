@@ -1,10 +1,10 @@
 import express from 'express';
-import publicRouter from './public-routes';
-import privateRouter from './private-routes';
-import { initDatabase } from './database';
 import errorhandler from 'errorhandler';
 import * as core from 'express-serve-static-core';
 import { Connection } from 'typeorm';
+import publicRouter from './public-routes';
+import privateRouter from './private-routes';
+import { initDatabase } from './database';
 
 export type Application = core.Express & { connection: Connection };
 
