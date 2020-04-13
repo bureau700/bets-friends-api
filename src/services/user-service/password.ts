@@ -7,8 +7,5 @@ export function encodePassword(password: string) {
     throw new Error('SECURITY_SALT not defined.');
   }
 
-  return crypto
-    .createHmac('sha256', salt)
-    .update(password)
-    .digest('hex');
+  return crypto.createHmac('sha256', salt).update(password).digest('hex');
 }

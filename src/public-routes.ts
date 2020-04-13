@@ -1,15 +1,21 @@
-import { Router } from 'express';
-import { userService } from './services/user-service';
+import { Request, Response, Router } from 'express';
 import { BadRequest, Unauthorized } from 'http-errors';
+import bodyParser from 'body-parser';
+import { body } from 'express-validator';
+import { userService } from './services/user-service';
+import { handleAsyncErrors, checkValidationErrors } from './express-utils';
+import { validationRules } from './services/user-service/constants';
 
 const router = Router();
+
+router.use(bodyParser.json());
 
 router.get('/login', async (req, res) => {
   const getUsernameAndPassword = (authorizationHeader: string): string[] => {
     const [type, value] = authorizationHeader.split(':');
     if (type.toLowerCase() !== 'basic') throw new BadRequest();
 
-    let decodedValue = Buffer.from(value.trim(), 'base64').toString('ascii');
+    const decodedValue = Buffer.from(value.trim(), 'base64').toString('ascii');
 
     try {
       const valueArray = decodedValue.split(':');
@@ -36,6 +42,31 @@ router.get('/login', async (req, res) => {
     }
   }
 });
+
+router.post(
+  '/signup',
+  [
+    // FIXME: improve error response
+    body('username')
+      .matches(/^[^\s]+$/i)
+      .isLength({
+        min: validationRules.username.minLength,
+        max: validationRules.username.maxLength,
+      }),
+    body('password').isLength({
+      min: validationRules.password.minLength,
+      max: validationRules.password.maxLength,
+    }),
+  ],
+  checkValidationErrors(),
+  handleAsyncErrors(async (req: Request, res: Response) => {
+    const user = await userService.createUser({
+      username: req.body.username,
+      password: req.body.password,
+    });
+    res.status(201).send({ username: user.username });
+  }),
+);
 
 router.get('/ping', (_req, res) => {
   res.send('pong');

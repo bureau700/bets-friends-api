@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+
 import path from 'path';
 import {
   Builder,
@@ -16,7 +18,7 @@ export async function loadFixtures() {
   try {
     connection = await createConnection({
       type: 'postgres',
-      url: process.env.DATABASE_URL + '-test',
+      url: `${process.env.DATABASE_URL}-test`,
       logging: ['error'],
       entities: [
         // FIXME: try to use src instead of dist...
@@ -33,12 +35,11 @@ export async function loadFixtures() {
 
     const builder = new Builder(connection, new Parser());
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const fixture of fixturesIterator(fixtures)) {
       const entity = await builder.build(fixture);
       await (entity as BaseEntity).save();
     }
-  } catch (err) {
-    throw err;
   } finally {
     if (connection) {
       await connection.close();

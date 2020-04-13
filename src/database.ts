@@ -7,13 +7,14 @@ export async function initDatabase() {
     process.env.NODE_ENV === 'test'
       ? {
           type: 'postgres',
-          url: process.env.DATABASE_URL + '-test',
+          url: `${process.env.DATABASE_URL}-test`,
           logging: ['error'],
         }
       : {
           type: 'postgres',
           url: process.env.DATABASE_URL,
           logging: ['query', 'error'],
+          synchronize: true,
         };
 
   const connection = await createConnection({
