@@ -14,15 +14,23 @@ export async function initApp(): Promise<Application> {
   const connection = await initDatabase();
 
   const app = express();
+
   app.set('db', connection);
+
+  app.use((req, _res, next) => {
+    req.appContext = app;
+    next();
+  });
+
   app.use('/', publicRouter);
+
   app.use('/', privateRouter);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     console.error('Error handler: ', err);
     // FIXME: warning shitty hack here!
     if (ServiceValidationError.isInstance(err)) {
-      console.log('resutnr la ');
       return res.status(err.statusCode).json({
         code: err.statusCode,
         message: err.message,
