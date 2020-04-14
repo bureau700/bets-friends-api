@@ -64,29 +64,9 @@ blocks:
         - name: Run E2E tests
           commands:
             - docker-compose up test
-
-  - name: Build
-    dependencies: ["Tests", "E2E tests"]
-    run:
-      when: "branch = 'master'"
-    task:
-      prologue:
-        commands:
-          - checkout
-          - sem-version node 12
-          - node --version
-          - npm --version
-          - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
-      jobs:
-        - name: Typecheck
-          commands:
-            - ./node_modules/.bin/tsc --skipLibCheck
-        - name: Unit Tests
-          commands:
-            - npm run test
   
   - name: Deploy
-    dependencies: ["Build"]
+    dependencies: ["Tests", "E2E tests"]
     run:
       when: "branch = 'master'"
     task:
