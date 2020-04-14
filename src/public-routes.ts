@@ -22,7 +22,6 @@ router.get('/login', async (req, res) => {
       if (valueArray.length !== 2) throw new BadRequest();
       return valueArray;
     } catch (err) {
-      console.error(err);
       throw new BadRequest();
     }
   };
@@ -34,7 +33,7 @@ router.get('/login', async (req, res) => {
     const token = await userService.authenticate(username, password);
     res.send(token);
   } catch (err) {
-    console.error(err);
+    // TODO: simplify this.
     if (err instanceof Unauthorized) {
       res.status(401).send(err);
     } else {

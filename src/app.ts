@@ -20,10 +20,12 @@ export async function initApp(): Promise<Application> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     console.error('Error handler: ', err);
-    if (err instanceof ServiceValidationError) {
+    // FIXME: warning shitty hack here!
+    if (ServiceValidationError.isInstance(err)) {
+      console.log('resutnr la ');
       return res.status(err.statusCode).json({
         code: err.statusCode,
-        message: err,
+        message: err.message,
         detail: err.errors,
       });
     }

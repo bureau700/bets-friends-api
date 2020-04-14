@@ -5,7 +5,14 @@ import { UnprocessableEntity } from 'http-errors';
 type Handler = (req: Request, res: Response, next: NextFunction) => void;
 
 export class ServiceValidationError extends UnprocessableEntity {
+  // FIXME: hack!
+  isServiceValidationError = true;
+
   errors: ValidationError[];
+
+  static isInstance(obj: any): obj is ServiceValidationError {
+    return obj.isServiceValidationError;
+  }
 
   constructor(errors: ValidationError[], msg?: string) {
     super(msg || 'validation error');
@@ -18,7 +25,6 @@ export function handleAsyncErrors(cb: Handler) {
     try {
       await cb(req, res, next);
     } catch (err) {
-      console.error(err);
       next(err);
     }
   };

@@ -77,10 +77,19 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 422,
-          message: 'validation error',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            code: 422,
+            message: 'validation error',
+            detail: [
+              expect.objectContaining({
+                value: username,
+                msg: 'Invalid value',
+                param: 'username',
+              }),
+            ],
+          }),
+        );
       });
 
       it('should return an error if username is too long', async () => {
@@ -90,10 +99,19 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 422,
-          message: 'validation error',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            code: 422,
+            message: 'validation error',
+            detail: [
+              expect.objectContaining({
+                value: username,
+                msg: 'Invalid value',
+                param: 'username',
+              }),
+            ],
+          }),
+        );
       });
 
       it('should return an error if username contains forbidden characters', async () => {
@@ -103,10 +121,19 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 422,
-          message: 'validation error',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            code: 422,
+            message: 'validation error',
+            detail: [
+              expect.objectContaining({
+                value: username,
+                msg: 'Invalid value',
+                param: 'username',
+              }),
+            ],
+          }),
+        );
       });
 
       it('should return an error if password is too short', async () => {
@@ -116,10 +143,19 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 422,
-          message: 'validation error',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            code: 422,
+            message: 'validation error',
+            detail: [
+              expect.objectContaining({
+                value: password,
+                msg: 'Invalid value',
+                param: 'password',
+              }),
+            ],
+          }),
+        );
       });
 
       it('should return an error if password is too long', async () => {
@@ -129,10 +165,19 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 422,
-          message: 'validation error',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            code: 422,
+            message: 'validation error',
+            detail: [
+              expect.objectContaining({
+                value: password,
+                msg: 'Invalid value',
+                param: 'password',
+              }),
+            ],
+          }),
+        );
       });
     });
   });

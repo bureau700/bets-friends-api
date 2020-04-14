@@ -24,7 +24,6 @@ router.use((req, _res, next) => {
     if (err.code === 'ERR_JWS_VERIFICATION_FAILED') {
       throw new Unauthorized();
     } else {
-      console.log(err);
       throw new InternalServerError();
     }
   }
