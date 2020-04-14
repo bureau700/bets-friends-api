@@ -4,9 +4,14 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+
+auto_cancel:
+  queued:
+    when: "true" # enable auto-cancel for branches, tags and pull-requests
     
 blocks:
   - name: Install dependencies
+  dependencies: []
     task:
       prologue:
         commands:
@@ -21,18 +26,26 @@ blocks:
             - npm install
             - cache store node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json) node_modules
 
-  # - name: Test with Docker
-  #   task:
-  #     prologue:
-  #       commands:
-  #         - checkout
-  #         - docker build -t bets-friends-e2e .
-  #     jobs:
-  #       - name: E2E Test
-  #         commands:
-  #           - docker run bets-friends-e2e
+  - name: Tests
+    dependencies: ["Install dependencies"]
+    task:
+      prologue:
+        commands:
+          - checkout
+          - sem-version node 12
+          - node --version
+          - npm --version
+          - cache restore node-modules-$SEMAPHORE_GIT_PR_BRANCH-$(checksum package-lock.json),node-modules-$SEMAPHORE_GIT_PR_BRANCH,node-modules-master
+      jobs:
+        - name: Typescript check
+          commands:
+            - npx tsc
+        - name: Lint check
+          commands:
+            - npm run lint
 
-  - name: Test with Docker
+  - name: E2E tests
+    dependencies: ["Install dependencies"]
     task:
       prologue:
         commands:
@@ -48,7 +61,7 @@ blocks:
           # Build test docker
           - docker-compose build test
       jobs:
-        - name: E2E Test
+        - name: Run E2E tests
           commands:
             # Run test docker container
             - docker-compose up test
