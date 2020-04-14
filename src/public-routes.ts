@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { BadRequest, Unauthorized } from 'http-errors';
 import bodyParser from 'body-parser';
 import { body } from 'express-validator';
+import listEndpoints from 'express-list-endpoints';
 import { userService } from './services/user-service';
 import { handleAsyncErrors, checkValidationErrors } from './express-utils';
 import { validationRules } from './services/user-service/constants';
@@ -69,6 +70,10 @@ router.post(
 
 router.get('/ping', (_req, res) => {
   res.send('pong');
+});
+
+router.get('/routes', (req, res) => {
+  res.json(listEndpoints(req.appContext));
 });
 
 export default router;
