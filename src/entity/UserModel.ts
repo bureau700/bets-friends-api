@@ -32,10 +32,9 @@ export default class UserModel extends BaseEntity {
     return this;
   }
 
-  static async findByUsername(
-    username: string,
-  ): Promise<UserModel | undefined> {
+  static async findByUsername(username: string): Promise<UserModel | null> {
     const results = await this.find({ where: { username } });
     if (results.length) return results[0];
+    return null;
   }
 }

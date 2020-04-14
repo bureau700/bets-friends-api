@@ -18,12 +18,13 @@ export default class TokenModel extends BaseEntity {
   @Index()
   token?: string;
 
-  @OneToOne(type => UserModel, { nullable: false })
+  @OneToOne(() => UserModel, { nullable: false })
   @JoinColumn()
   user?: UserModel;
 
   static async findByUserId(user: UserModel) {
     const results = await this.find({ where: { user } });
     if (results.length) return results[0];
+    return null;
   }
 }
