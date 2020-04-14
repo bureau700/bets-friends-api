@@ -9,7 +9,8 @@
     "start:dist": "env-cmd node dist/src/index.js",
     "build": "tsc --build tsconfig.json",
     "lint": "eslint \"./{src,tests}/**/*.{ts,tsx}\"",
-    "test": "jest"
+    "test": "jest",
+    "precommit": "tsc --skipLibCheck && lint-staged"
   },
   "devDependencies": {
     "@types/errorhandler": "^1.5.0",
@@ -63,5 +64,15 @@
   },
   "engines": {
     "node": ">=12"
+  },
+  "lint-staged": {
+    "package.json": [
+      "sort-package-json",
+      "git add"
+    ],
+    "{src,tests}/**/*.ts?(x)": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }
