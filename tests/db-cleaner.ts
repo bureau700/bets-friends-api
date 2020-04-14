@@ -16,7 +16,7 @@ export async function cleanDatabase() {
     AND schemaname != 'information_schema';
   `);
 
-  const tables = result.rows.map(row => `"${row.tablename}"`);
+  const tables = result.rows.map((row) => `"${row.tablename}"`);
 
   try {
     if (tables.length) {
