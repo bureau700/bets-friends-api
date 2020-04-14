@@ -1,8 +1,8 @@
-import { Router } from 'express';
 import { InternalServerError, Unauthorized } from 'http-errors';
+import express from 'express';
 import { decodeToken } from './services/user-service/jwt';
 
-const router = Router();
+const router = express.Router();
 
 router.use((req, _res, next) => {
   const authorizationHeader = req.get('Authorization') || '';
@@ -24,7 +24,6 @@ router.use((req, _res, next) => {
     if (err.code === 'ERR_JWS_VERIFICATION_FAILED') {
       throw new Unauthorized();
     } else {
-      console.log(err);
       throw new InternalServerError();
     }
   }
