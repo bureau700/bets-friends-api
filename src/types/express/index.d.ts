@@ -8,5 +8,6 @@ declare namespace Express {
     // use require and not import because imports
     // don't work in declaration files.
     user?: User;
+    appContext: import('express-serve-static-core').Express;
   }
 }
