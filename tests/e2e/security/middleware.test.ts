@@ -16,7 +16,7 @@ describe('app > security > middleware', () => {
 
   beforeEach(async () => {
     const basicAuth = (username: string, password: string) =>
-      `Basic: ${Buffer.from(`${username}:${password}`).toString('base64')}`;
+      `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
 
     const response = await request(app)
       .get('/login')

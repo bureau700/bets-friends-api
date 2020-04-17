@@ -1,13 +1,18 @@
-import { Unauthorized } from 'http-errors';
+import { InternalServerError, Unauthorized } from 'http-errors';
+import { decode } from 'punycode';
 import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
-import { createToken } from './jwt';
+import { createToken, decodeToken } from './jwt';
 import { encodePassword } from './password';
 import { userAlreadyExistsError } from './errors';
 
 export interface UserCreationRequest {
   username: string;
   password: string;
+}
+
+export interface User {
+  username: string;
 }
 
 export class UserService {
@@ -30,6 +35,26 @@ export class UserService {
       };
     }
     throw new Unauthorized();
+  }
+
+  public getUserByAuthorizationHeader(authorizationHeader: string): User {
+    try {
+      const [type, value] = authorizationHeader.split(/\s+/);
+      if (type.toLowerCase() !== 'bearer') throw new Unauthorized();
+
+      const decodedToken = decodeToken(value.trim());
+      if (!decodedToken?.username) {
+        throw new Unauthorized();
+      }
+
+      return { username: decodedToken.username };
+    } catch (err) {
+      if (err.code === 'ERR_JWS_VERIFICATION_FAILED') {
+        throw new Unauthorized();
+      } else {
+        throw new InternalServerError();
+      }
+    }
   }
 
   public async createUser({

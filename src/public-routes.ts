@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 
 router.get('/login', async (req, res) => {
   const getUsernameAndPassword = (authorizationHeader: string): string[] => {
-    const [type, value] = authorizationHeader.split(':');
+    const [type, value] = authorizationHeader.split(/\s+/);
     if (type.toLowerCase() !== 'basic') throw new BadRequest();
 
     const decodedValue = Buffer.from(value.trim(), 'base64').toString('ascii');
@@ -73,7 +73,9 @@ router.get('/ping', (_req, res) => {
 });
 
 router.get('/routes', (req, res) => {
-  res.json(listEndpoints(req.appContext));
+  res.json(listEndpoints(req.appInstance));
 });
 
-export default router;
+export async function publicRouter() {
+  return router;
+}
