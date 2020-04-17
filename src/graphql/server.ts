@@ -20,7 +20,7 @@ export async function createGraphQLServer() {
 
     // Disable this for deployments.
     // FIXME: detect environment.
-    playground: false,
+    playground: true,
 
     // Add information on all resolvers performance in Apollo debugger
     tracing: false,
