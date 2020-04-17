@@ -3,10 +3,10 @@ import errorhandler from 'errorhandler';
 import * as core from 'express-serve-static-core';
 import { Connection } from 'typeorm';
 import { HttpError } from 'http-errors';
-import publicRouter from './public-routes';
-import privateRouter from './private-routes';
 import { initDatabase } from './database';
 import { ServiceValidationError } from './express-utils';
+import { publicRouter } from './public-routes';
+import { privateRouter } from './private-routes';
 
 export type Application = core.Express & { connection: Connection };
 
@@ -18,13 +18,13 @@ export async function initApp(): Promise<Application> {
   app.set('db', connection);
 
   app.use((req, _res, next) => {
-    req.appContext = app;
+    req.appInstance = app;
     next();
   });
 
-  app.use('/', publicRouter);
+  app.use('/', await publicRouter());
 
-  app.use('/', privateRouter);
+  app.use('/', await privateRouter(app));
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
