@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import path from 'path';
 import { createConnection, ConnectionOptions } from 'typeorm';
-import { userService } from './services/user-service';
 
 export async function initDatabase() {
   const dbOptions: ConnectionOptions =

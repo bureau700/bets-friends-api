@@ -1,5 +1,4 @@
 import { InternalServerError, Unauthorized } from 'http-errors';
-import { decode } from 'punycode';
 import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken, decodeToken } from './jwt';
