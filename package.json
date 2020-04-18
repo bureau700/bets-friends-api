@@ -68,7 +68,7 @@
     "typeorm": "^0.2.24"
   },
   "engines": {
-    "node": ">=12"
+    "node": "13.8.0"
   },
   "lint-staged": {
     "package.json": [
