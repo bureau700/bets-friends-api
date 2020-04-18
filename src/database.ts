@@ -22,5 +22,15 @@ export async function initDatabase() {
     entities: [path.join(__dirname, 'entity', '*.ts')],
   });
 
+  // To create a test user.
+  // try {
+  //   await userService.createUser({
+  //     username: 'neolitec',
+  //     password: 'totoplop',
+  //   });
+  // } catch {
+  //   console.log('User already exists');
+  // }
+
   return connection;
 }

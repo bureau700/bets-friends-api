@@ -16,7 +16,7 @@ describe('app > security > authentication', () => {
 
   describe('/login', () => {
     const basicAuth = (username: string, password: string) =>
-      `Basic: ${Buffer.from(`${username}:${password}`).toString('base64')}`;
+      `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
 
     describe('when auth granted', () => {
       it('should authenticate user', async () => {

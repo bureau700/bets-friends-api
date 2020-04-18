@@ -1,13 +1,6 @@
 declare namespace Express {
-  interface User {
-    username: string;
-  }
-
   export interface Request {
-    // FIXME: when using UserModel
-    // use require and not import because imports
-    // don't work in declaration files.
-    user?: User;
-    appContext: import('express-serve-static-core').Express;
+    user?: import('../../services/user-service').User;
+    appInstance: import('express-serve-static-core').Express;
   }
 }
