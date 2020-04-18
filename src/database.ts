@@ -19,7 +19,7 @@ export async function initDatabase() {
 
   const connection = await createConnection({
     ...dbOptions,
-    entities: [path.join(__dirname, 'entity', '*.ts')],
+    entities: [path.join(__dirname, 'entity', '*.{ts,js}')],
   });
 
   // To create a test user.
