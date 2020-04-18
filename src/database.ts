@@ -3,8 +3,6 @@ import path from 'path';
 import { createConnection, ConnectionOptions } from 'typeorm';
 
 export async function initDatabase() {
-  console.log(`Using database ${process.env.DATABASE_URL} ...`);
-
   const dbOptions: ConnectionOptions =
     process.env.NODE_ENV === 'test'
       ? {

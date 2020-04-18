@@ -10,7 +10,7 @@ export type Context = {
 
 export async function createGraphQLServer() {
   const schema = await buildSchema({
-    resolvers: [`${__dirname}/**/*.resolver.ts`],
+    resolvers: [`${__dirname}/**/*.resolver.{ts,js}`],
   });
 
   return new ApolloServer({
