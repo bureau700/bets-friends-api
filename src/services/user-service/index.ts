@@ -1,4 +1,4 @@
-import { InternalServerError, Unauthorized } from 'http-errors';
+import { UnauthorizedError, InternalServerError } from 'routing-controllers';
 import UserModel from '../../entity/UserModel';
 import TokenModel from '../../entity/TokenModel';
 import { createToken, decodeToken } from './jwt';
@@ -22,7 +22,9 @@ export class UserService {
    */
   public async authenticate(username: string, password: string) {
     const user = await UserModel.findByUsername(username);
-    if (!user) throw new Error('Not found');
+
+    if (!user) throw new UnauthorizedError();
+
     if (user.password === encodePassword(password)) {
       // Create token or reuse an existant one.
       let token = (await TokenModel.findByUserId(user)) || new TokenModel();
@@ -33,25 +35,26 @@ export class UserService {
         token: token.token,
       };
     }
-    throw new Unauthorized();
+    throw new UnauthorizedError();
   }
 
   public getUserByAuthorizationHeader(authorizationHeader: string): User {
     try {
       const [type, value] = authorizationHeader.split(/\s+/);
-      if (type.toLowerCase() !== 'bearer') throw new Unauthorized();
+      if (type.toLowerCase() !== 'bearer') throw new UnauthorizedError();
 
       const decodedToken = decodeToken(value.trim());
       if (!decodedToken?.username) {
-        throw new Unauthorized();
+        throw new UnauthorizedError();
       }
 
       return { username: decodedToken.username };
     } catch (err) {
       if (err.code === 'ERR_JWS_VERIFICATION_FAILED') {
-        throw new Unauthorized();
+        throw new UnauthorizedError();
       } else {
-        throw new InternalServerError();
+        // FIXME: find another text
+        throw new InternalServerError('Unknown error');
       }
     }
   }

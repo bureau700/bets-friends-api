@@ -1,12 +1,14 @@
-import express, { NextFunction, Request, Response } from 'express';
-import errorhandler from 'errorhandler';
+import express from 'express';
 import * as core from 'express-serve-static-core';
 import { Connection } from 'typeorm';
-import { HttpError } from 'http-errors';
+import { useExpressServer } from 'routing-controllers';
 import { initDatabase } from './database';
-import { ServiceValidationError } from './express-utils';
-import { publicRouter } from './public-routes';
-import { privateRouter } from './private-routes';
+import AuthenticationController from './controllers/user.controller';
+import HealthCheckController from './controllers/healthcheck.controller';
+import ProfileController from './controllers/profile.controller';
+import { ValidationErrorHandler } from './middlewares/validation-error-handler';
+import { GlobalErrorHandler } from './middlewares/global-error-handler';
+import { createGraphQLServer } from './graphql/server';
 
 export type Application = core.Express & { connection: Connection };
 
@@ -22,33 +24,37 @@ export async function initApp(): Promise<Application> {
     next();
   });
 
-  app.use('/', await publicRouter());
+  // app.use(userContext);
 
-  app.use('/', await privateRouter(app));
+  const graphQLServer = await createGraphQLServer();
+  graphQLServer.applyMiddleware({ app, disableHealthCheck: true });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
-    console.error('Error handler: ', err);
-    // FIXME: warning shitty hack here!
-    if (ServiceValidationError.isInstance(err)) {
-      return res.status(err.statusCode).json({
-        code: err.statusCode,
-        message: err.message,
-        detail: err.errors,
-      });
-    }
-    if (err instanceof HttpError) {
-      return res.status(err.statusCode).json({
-        code: err.statusCode,
-        message: err.message,
-      });
-    }
-    return res.status(500).json({
-      code: 500,
-      message: 'Oops! An error occured...',
-    });
+  useExpressServer(app, {
+    controllers: [
+      AuthenticationController,
+      HealthCheckController,
+      ProfileController,
+    ],
+    middlewares: [ValidationErrorHandler, GlobalErrorHandler],
+    classTransformer: true,
+    defaultErrorHandler: false,
   });
-  app.use(errorhandler());
+
+  // app.use((err: any, req: Request, res: Response) => {
+  //   if (err instanceof HttpError) {
+  //     return res.status(err.httpCode).json({
+  //       code: err.httpCode,
+  //       message: err.message,
+  //     });
+  //   }
+
+  //   // console.log(res);
+
+  //   return res.status(500).json({
+  //     code: 500,
+  //     message: 'Oops! An error occured...',
+  //   });
+  // });
 
   (app as Application).connection = connection;
 

@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { initApp, Application } from '../../../src/app';
-import { USERNAME, PASSWORD } from './constants';
+import { USERNAME, PASSWORD } from '../constants';
+import { getToken } from '../common';
 
 describe('app > security > middleware', () => {
   let app: Application;
@@ -15,16 +16,7 @@ describe('app > security > middleware', () => {
   });
 
   beforeEach(async () => {
-    const basicAuth = (username: string, password: string) =>
-      `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
-
-    const response = await request(app)
-      .get('/login')
-      .set('Authorization', basicAuth(USERNAME, PASSWORD))
-      .set('Accept', 'application/json')
-      .expect(200);
-
-    token = response.body.token;
+    token = await getToken(app, USERNAME, PASSWORD);
   });
 
   // Try to call a private endpoint
