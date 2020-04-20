@@ -33,6 +33,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'object-curly-spacing': 'error',
     'no-useless-constructor': 'off',
+    'max-classes-per-file': 'off',
 
     // TypeScript
     '@typescript-eslint/camelcase': 'off',
@@ -44,7 +45,7 @@ module.exports = {
     '@typescript-eslint/prefer-interface': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
-    // '@typescript-eslint/no-implicit-any': 'error',
+    '@typescript-eslint/no-implicit-any': 'off',
 
     // Jest
     'jest/no-disabled-tests': 'warn',

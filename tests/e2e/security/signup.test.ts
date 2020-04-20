@@ -2,7 +2,7 @@ import request from 'supertest';
 import faker from 'faker';
 import { initApp, Application } from '../../../src/app';
 
-describe('app > security > signup', () => {
+describe('app > security', () => {
   let app: Application;
 
   beforeAll(async () => {
@@ -54,10 +54,12 @@ describe('app > security > signup', () => {
           .set('Accept', 'application/json')
           .send({ username, password });
 
-        expect(response.body).toEqual({
-          code: 409,
-          message: 'User already exists',
-        });
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            // code: 409,
+            message: 'User already exists',
+          }),
+        );
       });
     });
 
@@ -79,15 +81,15 @@ describe('app > security > signup', () => {
 
         expect(response.body).toEqual(
           expect.objectContaining({
-            code: 422,
-            message: 'validation error',
-            detail: [
+            httpCode: 400,
+            name: 'VALIDATION_ERROR',
+            message: 'Data is not valid.',
+            errors: expect.arrayContaining([
               expect.objectContaining({
                 value: username,
-                msg: 'Invalid value',
-                param: 'username',
+                property: 'username',
               }),
-            ],
+            ]),
           }),
         );
       });
@@ -101,15 +103,15 @@ describe('app > security > signup', () => {
 
         expect(response.body).toEqual(
           expect.objectContaining({
-            code: 422,
-            message: 'validation error',
-            detail: [
+            httpCode: 400,
+            name: 'VALIDATION_ERROR',
+            message: 'Data is not valid.',
+            errors: expect.arrayContaining([
               expect.objectContaining({
                 value: username,
-                msg: 'Invalid value',
-                param: 'username',
+                property: 'username',
               }),
-            ],
+            ]),
           }),
         );
       });
@@ -123,15 +125,15 @@ describe('app > security > signup', () => {
 
         expect(response.body).toEqual(
           expect.objectContaining({
-            code: 422,
-            message: 'validation error',
-            detail: [
+            httpCode: 400,
+            name: 'VALIDATION_ERROR',
+            message: 'Data is not valid.',
+            errors: expect.arrayContaining([
               expect.objectContaining({
                 value: username,
-                msg: 'Invalid value',
-                param: 'username',
+                property: 'username',
               }),
-            ],
+            ]),
           }),
         );
       });
@@ -145,15 +147,15 @@ describe('app > security > signup', () => {
 
         expect(response.body).toEqual(
           expect.objectContaining({
-            code: 422,
-            message: 'validation error',
-            detail: [
+            httpCode: 400,
+            name: 'VALIDATION_ERROR',
+            message: 'Data is not valid.',
+            errors: expect.arrayContaining([
               expect.objectContaining({
                 value: password,
-                msg: 'Invalid value',
-                param: 'password',
+                property: 'password',
               }),
-            ],
+            ]),
           }),
         );
       });
@@ -167,15 +169,15 @@ describe('app > security > signup', () => {
 
         expect(response.body).toEqual(
           expect.objectContaining({
-            code: 422,
-            message: 'validation error',
-            detail: [
+            httpCode: 400,
+            name: 'VALIDATION_ERROR',
+            message: 'Data is not valid.',
+            errors: expect.arrayContaining([
               expect.objectContaining({
                 value: password,
-                msg: 'Invalid value',
-                param: 'password',
+                property: 'password',
               }),
-            ],
+            ]),
           }),
         );
       });

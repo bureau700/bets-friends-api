@@ -1,10 +1,12 @@
 import express from 'express';
+import * as core from 'express-serve-static-core';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
+import { UnauthorizedError } from 'routing-controllers';
 import { userService, User } from '../services/user-service';
 
 export type Context = {
-  req: express.Request<any>;
+  req: express.Request<core.Params>;
   user: User;
 };
 
@@ -50,22 +52,24 @@ export async function createGraphQLServer() {
     //   } as Context;
     // },
 
-    formatError: (err) => {
-      console.error(err);
+    // formatError: (err) => {
+    //   console.error('LALALALA', err, err.constructor);
 
-      // Don't give the specific errors to the client.
-      if (err.message.startsWith('Database Error: ')) {
-        return new Error('Internal server error');
-      }
+    //   // Don't give the specific errors to the client.
+    //   if (err.message.startsWith('Database Error: ')) {
+    //     return new Error('Internal server error');
+    //   }
 
-      // Otherwise return the original error.  The error can also
-      // be manipulated in other ways, so long as it's returned.
-      return err;
-    },
+    //   // Otherwise return the original error.  The error can also
+    //   // be manipulated in other ways, so long as it's returned.
+    //   return err;
+    // },
 
     context: async ({ req }) => {
+      const authorizationHeader = req.get('Authorization');
+      if (!authorizationHeader) throw new UnauthorizedError();
       const user = userService.getUserByAuthorizationHeader(
-        req.get('Authorization') || '',
+        authorizationHeader,
       );
 
       const context = {
