@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { fail } from 'assert';
 import { initApp, Application } from '../../../src/app';
-import { USERNAME, PASSWORD } from './constants';
+import { USERNAME, PASSWORD } from '../constants';
 
 describe('app > security > authentication', () => {
   let app: Application;

@@ -1,5 +1,5 @@
 import { JWK, JWT } from 'jose';
-import { Unauthorized } from 'http-errors';
+import { UnauthorizedError } from 'routing-controllers';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -12,7 +12,7 @@ function checkJwtSecret() {
     console.error("JWT secret null. Authentication can't be processed.");
 
     // FIXME: send unauthorized.
-    throw new Unauthorized();
+    throw new UnauthorizedError();
   }
 }
 
