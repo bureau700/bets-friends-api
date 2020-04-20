@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 
 @Middleware({ type: 'after' })
 export class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
-  error(error: any, request: Request, response: Response) {
+  error(error: unknown, request: Request, response: Response) {
     if (error instanceof HttpError) {
       response.status(error.httpCode).json(error);
       return;

@@ -1,11 +1,12 @@
 import express from 'express';
+import * as core from 'express-serve-static-core';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { UnauthorizedError } from 'routing-controllers';
 import { userService, User } from '../services/user-service';
 
 export type Context = {
-  req: express.Request<any>;
+  req: express.Request<core.Params>;
   user: User;
 };
 
