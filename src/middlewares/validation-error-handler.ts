@@ -18,9 +18,15 @@ class HttpValidationError extends BadRequestError {
 
 @Middleware({ type: 'after' })
 export class ValidationErrorHandler implements ExpressErrorMiddlewareInterface {
-  error(error: any, request: Request, response: Response, next: NextFunction) {
+  error(
+    error: unknown,
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) {
     if (
       error instanceof BadRequestError &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Array.isArray((error as any).errors) &&
       typeof error?.message === 'string' &&
       error.message.startsWith('Invalid body')
@@ -28,6 +34,7 @@ export class ValidationErrorHandler implements ExpressErrorMiddlewareInterface {
       next(
         new HttpValidationError(
           'Data is not valid.',
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (error as any).errors as ValidationError[],
         ),
       );

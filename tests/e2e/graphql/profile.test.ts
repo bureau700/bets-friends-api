@@ -1,4 +1,3 @@
-import request from 'supertest';
 import gql from 'fake-tag';
 import { initApp, Application } from '../../../src/app';
 import { USERNAME, PASSWORD } from '../constants';

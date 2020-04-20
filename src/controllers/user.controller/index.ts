@@ -28,8 +28,8 @@ export default class AuthenticationController {
   @Post('/signup')
   async signup(@Body({ validate: true }) signupRequest: SignupRequest) {
     const user = await userService.createUser({
-      username: signupRequest.username!,
-      password: signupRequest.password!,
+      username: signupRequest.username,
+      password: signupRequest.password,
     });
 
     return { username: user.username };

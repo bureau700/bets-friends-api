@@ -1,7 +1,8 @@
 import request from 'supertest';
+import * as core from 'express-serve-static-core';
 
 export async function getToken(
-  app: any,
+  app: core.Express,
   username: string,
   password: string,
 ): Promise<string> {

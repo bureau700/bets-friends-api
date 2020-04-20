@@ -1,11 +1,12 @@
 import express from 'express';
+import * as core from 'express-serve-static-core';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { UnauthorizedError } from 'routing-controllers';
 import { userService, User } from '../services/user-service';
 
 export type Context = {
-  req: express.Request<any>;
+  req: express.Request<core.Params>;
   user: User;
 };
 
@@ -52,8 +53,6 @@ export async function createGraphQLServer() {
     // },
 
     // formatError: (err) => {
-    //   console.error('LALALALA', err, err.constructor);
-
     //   // Don't give the specific errors to the client.
     //   if (err.message.startsWith('Database Error: ')) {
     //     return new Error('Internal server error');

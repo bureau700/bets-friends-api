@@ -1,7 +1,11 @@
 import { Matches, MinLength, MaxLength, IsNotEmpty } from 'class-validator';
 import { validationRules } from '../../services/user-service/constants';
 
-export class SignupRequest {
+type TruthyValues<T> = {
+  [P in keyof T]-?: NonNullable<T[P]>;
+};
+
+class PartialSignupRequest {
   @IsNotEmpty()
   @Matches(/^[^\s]+$/i)
   @MinLength(validationRules.username.minLength)
@@ -14,4 +18,4 @@ export class SignupRequest {
   password: string | null = null;
 }
 
-// export type SignupRequest = Required<PartialSignupRequest>;
+export type SignupRequest = TruthyValues<PartialSignupRequest>;
