@@ -60,7 +60,7 @@
     "jose": "^1.26.0",
     "pg": "^8.0.3",
     "reflect-metadata": "^0.1.13",
-    "routing-controllers": "^0.8.1-alpha.2",
+    "routing-controllers": "^0.8.1",
     "type-graphql": "^0.17.6",
     "typeorm": "^0.2.24"
   },
