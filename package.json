@@ -37,7 +37,7 @@
     "fake-tag": "^2.0.0",
     "faker": "^4.1.0",
     "husky": "^4.2.3",
-    "jest": "^25.2.7",
+    "jest": "^25.4.0",
     "lint-staged": "^10.1.7",
     "prettier": "^2.0.4",
     "sort-package-json": "^1.23.1",
