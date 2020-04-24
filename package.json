@@ -40,7 +40,7 @@
     "jest": "^25.4.0",
     "lint-staged": "^10.1.7",
     "prettier": "^2.0.5",
-    "sort-package-json": "^1.23.1",
+    "sort-package-json": "^1.42.1",
     "sqlite3": "^4.1.1",
     "supertest": "^4.0.2",
     "ts-jest": "^25.4.0",
