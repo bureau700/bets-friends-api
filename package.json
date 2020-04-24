@@ -57,7 +57,7 @@
     "class-validator": "^0.12.1",
     "express": "^4.17.1",
     "graphql": "^14.1.1",
-    "jose": "^1.25.0",
+    "jose": "^1.26.0",
     "pg": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
