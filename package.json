@@ -46,7 +46,7 @@
     "ts-jest": "^25.5.1",
     "ts-node": "^8.10.1",
     "tslib": "^1.13.0",
-    "typeorm-fixtures-cli": "^1.5.0",
+    "typeorm-fixtures-cli": "^1.6.0",
     "typescript": "^3.9.3"
   },
   "dependencies": {
